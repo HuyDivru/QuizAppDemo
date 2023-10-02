@@ -13,17 +13,19 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.quizapp.activity_user.MainActivityUser;
 import com.example.quizapp.adapter.CategoryAdapter;
 import com.example.quizapp.databinding.ActivityMainBinding;
 import com.example.quizapp.model.CategoryModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<CategoryModel> list;
     CategoryAdapter adapter;
 
+    BottomNavigationView bottomNavigationView;
 
     boolean isDialogShow=false;
     @Override
@@ -65,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
 
+
         //
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
-
-
+        //
+        list = new ArrayList<>();
         //
 
         dialog = new Dialog(this);
@@ -87,11 +91,30 @@ public class MainActivity extends AppCompatActivity {
         inputCategoryName = dialog.findViewById(R.id.edit_cateegory);
         categoryImage = dialog.findViewById(R.id.profile_image);
         fecthImage = dialog.findViewById(R.id.view);
+        //bottom navigaiton
+        binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.admin:
+                        return true;
+                    case R.id.user:
+                        Intent intent=new Intent(MainActivity.this, MainActivityUser.class);
+                        startActivity(intent);
+                        return true;
+                }
+                return false;
+            }
 
+        });
+
+
+        //
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        list = new ArrayList<>();
+
         binding.recyclerview.setLayoutManager(layoutManager);
         adapter = new CategoryAdapter(this, list);
+        binding.recyclerview.setAdapter(adapter);
 
         //lấy dữ liệu của firebase
         database.getReference().child("categories").addValueEventListener(new ValueEventListener() {
@@ -153,10 +176,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (name.isEmpty()) {
                     inputCategoryName.setError("Enter category name");
                 } else {
-                    if (!isFinishing()) {
                         progressDialog.show();
                         uploadData();
-                    }
                 }
             }
         });
@@ -166,12 +187,11 @@ public class MainActivity extends AppCompatActivity {
                 isDialogShow=false;
             }
         });
-        binding.recyclerview.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
     }
 
     private void uploadData() {
-        if(imageUri!=null) {
+
             final StorageReference reference = storage.getReference().child("category").child(new Date().getTime() + "");
 
             reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -205,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             });
-        }
+
     }
 
     @Override

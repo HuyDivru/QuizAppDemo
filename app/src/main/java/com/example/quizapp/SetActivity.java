@@ -33,6 +33,7 @@ public class SetActivity extends AppCompatActivity {
                 getIntent().getStringExtra("category"), key, new GrideAdapter.GridListener() {
             @Override
             public void addSets() {
+
                 database.getReference().child("categories").child(key)
                         .child("setNum").setValue(getIntent().getIntExtra("sets",0)+a++).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override

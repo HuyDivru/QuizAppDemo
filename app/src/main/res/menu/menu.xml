@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Admin"
+        android:icon="@drawable/admin"
+        android:enabled="true"
+        android:id="@+id/admin"
+        />
+    <item android:title="User"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:id="@+id/user"
+        />
+</menu>

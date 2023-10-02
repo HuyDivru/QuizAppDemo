@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SetActivity">
+    tools:context=".activity_user.SetActivityUser">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,11 +31,11 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
     <GridView
-        android:id="@+id/gridView"
+        android:id="@+id/gridView_user"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:columnWidth="400dp"
+        android:columnWidth="300dp"
         android:gravity="center"
         android:horizontalSpacing="15dp"
         android:numColumns="auto_fit"
