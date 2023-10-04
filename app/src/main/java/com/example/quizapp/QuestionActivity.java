@@ -1,17 +1,21 @@
 package com.example.quizapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.quizapp.activity_user.QuestionActivityUser;
 import com.example.quizapp.adapter.QuestionAdapter;
 import com.example.quizapp.databinding.ActivityQuestionBinding;
 import com.example.quizapp.model.QuestionModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,7 +46,28 @@ public class QuestionActivity extends AppCompatActivity {
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         binding.questionRec.setLayoutManager(layoutManager);
-        adapter=new QuestionAdapter(this,list);
+        adapter=new QuestionAdapter(this,list,categoryName, new QuestionAdapter.DeleteListener() {
+            @Override
+            public void onLongClick(int position, String id) {
+                AlertDialog.Builder builder=new AlertDialog.Builder(QuestionActivity.this);
+                builder.setTitle("Delete question");
+                builder.setMessage("Are you sure , you want to delete this quesition");
+                builder.setPositiveButton("Yes",(dialogInterface,i)->{
+                    database.getReference().child("Sets").child(categoryName).child("questions")
+                            .child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(QuestionActivity.this,"question deleted",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                });
+                builder.setNegativeButton("NO",(dialogInterface,i)->{
+                        dialogInterface.dismiss();
+                });
+                AlertDialog alertDialog=builder.create();
+                alertDialog.show();
+            }
+        });
         binding.questionRec.setAdapter(adapter);
 
         database.getReference().child("Sets").child(categoryName).child("questions")
@@ -51,6 +76,7 @@ public class QuestionActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if(snapshot.exists()){
+                                    list.clear();
                                     for (DataSnapshot dataSnapshot:
                                          snapshot.getChildren()) {
                                         QuestionModel model=dataSnapshot.getValue(QuestionModel.class);

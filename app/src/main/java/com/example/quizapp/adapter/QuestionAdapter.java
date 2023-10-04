@@ -11,16 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizapp.R;
 import com.example.quizapp.databinding.ItemQuestionBinding;
 import com.example.quizapp.model.QuestionModel;
+import com.google.android.play.integrity.internal.l;
 
 import java.util.ArrayList;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
     Context context;
     ArrayList<QuestionModel> list;
+    String categoryName;
+    DeleteListener listener;
 
-    public QuestionAdapter(Context context, ArrayList<QuestionModel> list) {
+    public QuestionAdapter(Context context, ArrayList<QuestionModel> list, String categoryName, DeleteListener listener) {
         this.context = context;
         this.list = list;
+        this.categoryName = categoryName;
+        this.listener = listener;
     }
 
     @NonNull
@@ -34,6 +39,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         QuestionModel model=list.get(position);
 
         holder.binding.question.setText(model.getQuestion());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onLongClick(position,list.get(position).getKey());
+            }
+        });
     }
 
     @Override
@@ -47,5 +59,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             super(itemView);
             binding=ItemQuestionBinding.bind(itemView);
         }
+    }
+    public interface DeleteListener{
+        public void onLongClick(int position,String id);
     }
 }

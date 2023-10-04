@@ -16,6 +16,13 @@
         android:theme="@style/Theme.QuizApp"
         tools:targetApi="31">
         <activity
+            android:name=".activity_user.ScoreActivityUser"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity_user.QuestionActivityUser"
             android:exported="false">
             <meta-data

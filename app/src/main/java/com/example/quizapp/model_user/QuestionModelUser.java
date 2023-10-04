@@ -5,6 +5,9 @@ public class QuestionModelUser {
     private String key;
     private int setNum;
 
+    public QuestionModelUser() {
+    }
+
     public QuestionModelUser(String question, String optionA, String optionB, String optionC, String optionD, String correctAsw, String key, int setNum) {
         this.question = question;
         this.optionA = optionA;

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     View fecthImage;
     Dialog dialog;
     Uri imageUri;
-    int i = 0;
+//    int i = 0;
     ProgressDialog progressDialog;
 
     //
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    list.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         list.add(new CategoryModel(
                                 dataSnapshot.child("categoryName").getValue().toString(),

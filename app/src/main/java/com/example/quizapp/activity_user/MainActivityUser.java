@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,14 +33,23 @@ public class MainActivityUser extends AppCompatActivity {
     CategoryAdapterUser adapter;
     ProgressDialog progressDialog;
     BottomNavigationView bottomNavigationView;
+    Dialog loadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityMainUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        getSupportActionBar().hide();
         list=new ArrayList<>();
 
+
+        loadingDialog=new Dialog(this);
+        loadingDialog.setContentView(R.layout.loading_dialog);
+        if (loadingDialog.getWindow()!=null){
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            loadingDialog.setCancelable(false);
+        }
+        loadingDialog.show();
         binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -74,14 +86,17 @@ public class MainActivityUser extends AppCompatActivity {
                         ));
                     }
                     adapter.notifyDataSetChanged();
+                    loadingDialog.dismiss();
                 } else {
                     Toast.makeText(MainActivityUser.this, "Category not exits", Toast.LENGTH_SHORT).show();
+                    loadingDialog.dismiss();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(MainActivityUser.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+                loadingDialog.dismiss();
             }
         });
     }

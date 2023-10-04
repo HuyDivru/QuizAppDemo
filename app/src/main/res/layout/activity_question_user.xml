@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/clock" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/question_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -148,19 +148,19 @@
             app:layout_constraintTop_toBottomOf="@+id/button4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/btn_next_back"
         android:padding="10dp"
-        android:text="Next Question"
+        android:text="Next"
         android:textAllCaps="false"
+        android:alpha="0.3"
+        android:enabled="false"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/optionContainers" />
 </androidx.constraintlayout.widget.ConstraintLayout>
